@@ -1,0 +1,57 @@
+﻿@model IEnumerable<DataTablesInlineUpdate.Models.OrderLine>
+
+@{
+    ViewBag.Title = "View";
+}
+
+<h2>View</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Article.ArticleNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NumberOfItems)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PickedNumberOfItems)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DeliveryDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Article.ArticleNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NumberOfItems)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PickedNumberOfItems)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DeliveryDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreatedDate)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.OrderLineId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.OrderLineId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.OrderLineId })
+        </td>
+    </tr>
+}
+
+</table>
