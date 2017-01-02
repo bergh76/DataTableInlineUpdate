@@ -12,11 +12,13 @@ namespace DataTablesInlineUpdate.Models
     {
         private ApplicationDbContext _context;
         public UnitOfWork() { }
+
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
         }
-        public async Task<IEnumerable<OrderViewModel>> ListOrder(ApplicationDbContext context)
+
+        internal async Task<IEnumerable<OrderViewModel>> ListOrder(ApplicationDbContext context)
         {
             var result = from a in context.Articles
                          join o in context.OrderLines on a.ArticleId equals o.ArticleId

@@ -22,6 +22,7 @@ namespace DataTablesInlineUpdate.Models
         public string CartIdentifier { get; set; }
         public OrderStatus Status { get; set; }
     }
+
     public class OrderLine
     {
         [Key]
