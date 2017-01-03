@@ -1,0 +1,22 @@
+﻿@model DataTablesInlineUpdate.Models.Order
+@{
+    ViewBag.Title = "OrderLines";
+}
+
+<h2>OrderLines</h2>
+<table style="width:100%;">
+    <thead>
+        <tr><th></th></tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.OrderLines)
+        {
+            <tr>
+                <td>@Html.EditorFor(m => item.Article.ArticleNumber)</td>
+                <td>@Html.EditorFor(m => item.Article.ArticleName)</td>
+                <td>@Html.EditorFor(m => item.NumberOfItems)</td>
+                <td>@Html.EditorFor(m => item.PickedNumberOfItems)</td>
+            </tr>
+        }
+    </tbody>
+</table>

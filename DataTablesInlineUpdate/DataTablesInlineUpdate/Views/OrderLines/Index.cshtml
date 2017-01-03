@@ -1,0 +1,116 @@
+﻿@model IEnumerable<DataTablesInlineUpdate.Models.OrderLine>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<script>
+    $(document).ready(function () {
+        $("#artnrVal").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/OrderLines/GetArticleNrValue",
+                    type: "POST",
+                    dataType: "json",
+                    data: { artnrVal: request.term },
+                    success: function (data) {
+                        console.log(data);
+                        response($.map(data, function (item) {
+                            return { label: item.ArticleNumber, value: item.ArticleNumber };
+                        }))
+                    }
+                })
+            },
+            messages: {
+                noResults: "", results: ""
+            }
+        });
+    })
+    $(document).ready(function () {
+        $("#artName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/OrderLines/GetArticleName",
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        artName: request.term                        
+                    },
+                    success: function (data) {
+                        console.log(data);
+                        response($.map(data, function (item) {
+                            return { label: item.ArticleName, value: item.ArticleName };
+                        }))
+                    }
+                })
+            },
+            messages: {
+                noResults: "", results: ""
+            }
+        });
+    })
+</script>
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Article.ArticleNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Article.ArticleName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NumberOfItems)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PickedNumberOfItems)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DeliveryDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            @using (Html.BeginForm())
+            {
+                <td>
+                    @Html.TextBoxFor(modelItem => item.Article.ArticleNumber, new { @class = "form-control", id = "artnrVal", value = "" })
+                </td>          
+
+            <td>
+                @Html.TextBoxFor(modelItem => item.Article.ArticleName, new { @class= "form-control", id ="artName", value = "" })
+            </td>
+            <td>
+                @Html.TextBoxFor(modelItem => item.NumberOfItems)
+            </td>
+            <td>
+                @Html.TextBoxFor(modelItem => item.PickedNumberOfItems)
+            </td>
+            <td>
+                @Html.TextBoxFor(modelItem => item.DeliveryDate)
+            </td>
+            <td>
+                @Html.TextBoxFor(modelItem => item.CreatedDate)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.OrderLineId }) |
+                @Html.ActionLink("Details", "Details", new { id = item.OrderLineId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.OrderLineId })
+            </td>
+            }
+
+        </tr>
+    }
+
+</table>

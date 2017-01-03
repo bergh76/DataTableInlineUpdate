@@ -23,9 +23,19 @@ namespace DataTablesInlineUpdate.Controllers
             return View();
         }
 
-        public async Task<ActionResult> Orders(ApplicationDbContext context, UnitOfWork repo)
-        {            
-            return View(await repo.OrderLines(context));
+        //public async Task<ActionResult> Orders(int orderline, ApplicationDbContext context, UnitOfWork repo)
+        //{
+        //    return View(await repo.OrderLines(orderline, context));
+        //}
+
+        [HttpPost]
+        public JsonResult GetArticleNrValue(string artnrVal)
+        {
+            var search = from o in _context.OrderLines
+                         join a in _context.Articles on o.ArticleId equals a.ArticleId
+                  where a.ArticleNumber.StartsWith(artnrVal)
+                         select new { a.ArticleNumber };
+            return Json(search, JsonRequestBehavior.AllowGet);
         }
     }
 }

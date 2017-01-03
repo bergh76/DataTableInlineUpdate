@@ -60,7 +60,6 @@ namespace DataTablesInlineUpdate.Models
         public string PhoneNumber { get; set; }
         public string MobileNumber { get; set; }
         public string AccountId { get; set; }
-
     }
 
     public class ShippingAddress

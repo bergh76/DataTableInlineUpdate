@@ -1,0 +1,58 @@
+﻿@model DataTablesInlineUpdate.Models.OrderLine
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>OrderLine</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Article.ArticleNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Article.ArticleNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NumberOfItems)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NumberOfItems)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PickedNumberOfItems)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PickedNumberOfItems)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DeliveryDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DeliveryDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatedDate)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.OrderLineId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

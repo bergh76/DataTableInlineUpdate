@@ -4,7 +4,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
-    <script src="~/Scripts/jquery-1.10.2.js"></script>
+    @*@Scripts.Render("~/bundles/jquery")*@
+
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
@@ -23,7 +29,12 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, null)</li>
                     <li>@Html.ActionLink("API", "Index", "Help", new { area = "" }, null)</li>
-                    <li>@Html.ActionLink("Orders", "Orders", "Home", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("Artiklar", "Index", "Articles", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("Kunder", "Index", "Customers", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("Levadress", "Index", "ShippingAddresses", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("Fakuror", "Index", "BillingAddresses", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("OrderLines", "Index", "OrderLines", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("Orders", "Index", "Orders", new { area = "" }, null)</li>
                 </ul>
             </div>
         </div>
@@ -35,9 +46,9 @@
             <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
         </footer>
     </div>
-
-    @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @*<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>*@
+
     @RenderSection("scripts", required: false)
 </body>
 </html>
