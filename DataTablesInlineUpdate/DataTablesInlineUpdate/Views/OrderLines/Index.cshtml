@@ -4,59 +4,12 @@
     ViewBag.Title = "Index";
 }
 
-<script>
-    $(document).ready(function () {
-        $("#artnrVal").autocomplete({
-            source: function (request, response) {
-                $.ajax({
-                    url: "/OrderLines/GetArticleNrValue",
-                    type: "POST",
-                    dataType: "json",
-                    data: { artnrVal: request.term },
-                    success: function (data) {
-                        console.log(data);
-                        response($.map(data, function (item) {
-                            return { label: item.ArticleNumber, value: item.ArticleNumber };
-                        }))
-                    }
-                })
-            },
-            messages: {
-                noResults: "", results: ""
-            }
-        });
-    })
-    $(document).ready(function () {
-        $("#artName").autocomplete({
-            source: function (request, response) {
-                $.ajax({
-                    url: "/OrderLines/GetArticleName",
-                    type: "POST",
-                    dataType: "json",
-                    data: {
-                        artName: request.term                        
-                    },
-                    success: function (data) {
-                        console.log(data);
-                        response($.map(data, function (item) {
-                            return { label: item.ArticleName, value: item.ArticleName };
-                        }))
-                    }
-                })
-            },
-            messages: {
-                noResults: "", results: ""
-            }
-        });
-    })
-</script>
-
 <h2>Index</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table">
+<table class="table table-responsive table-striped">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.Article.ArticleNumber)
@@ -77,20 +30,88 @@
             @Html.DisplayNameFor(model => model.CreatedDate)
         </th>
         <th></th>
+        <th></th>
     </tr>
 
     @foreach (var item in Model)
     {
+
+        <script>
+
+    var artNrVal;
+    var artNameVal;
+    // Get articlenumber and list to textbox
+    $(document).ready(function () {
+        $("artnrVal" + @item.OrderLineId.ToString()).autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/OrderLines/GetArticleNrValue",
+                    type: "POST",
+                    dataType: "json",
+                    data: { artnrVal: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            artNameVal = item.ArticleName;
+                            return {
+                                label: item.ArticleNumber, value: item.ArticleNumber,
+                            };
+                        }))
+                        console.log(artNameVal);
+                        $(document).ready(function () {
+                            var currentText = document.getElementById('artName'+ @item.OrderLineId.ToString()).value;
+                            var newText = artNameVal;
+                            console.log(newText);
+                            document.getElementById('artName'+ @item.OrderLineId.ToString()).value = newText;
+                        });
+                    }
+                })
+            },
+        });
+    })
+    // Get articlename and list to textbox
+    $(document).ready(function () {
+        $("#artName" + @item.OrderLineId.ToString()).autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/OrderLines/GetArticleName",
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        artName: request.term
+                    },
+                    success: function (data) {
+                        console.log(data);
+                        response($.map(data, function (item) {
+                            artNrVal = item.ArticleNumber;
+                            return { label: item.ArticleName, value: item.ArticleName };
+                        }))
+                        console.log(artNrVal);
+                        $(document).ready(function () {
+                            var currentText = document.getElementById('artnrVal'+ @item.OrderLineId.ToString()).value;
+                            var newText = artNrVal;
+                            console.log(newText);
+                            document.getElementById('artnrVal'+ @item.OrderLineId.ToString()).value = newText;
+
+                        });
+                    }
+                })
+            },
+        });
+    })
+        </script>
         <tr>
             @using (Html.BeginForm())
             {
-                <td>
-                    @Html.TextBoxFor(modelItem => item.Article.ArticleNumber, new { @class = "form-control", id = "artnrVal", value = "" })
-                </td>          
+                @Html.AntiForgeryToken()
 
-            <td>
-                @Html.TextBoxFor(modelItem => item.Article.ArticleName, new { @class= "form-control", id ="artName", value = "" })
-            </td>
+                <td>
+                    @Html.TextBoxFor(modelItem => item.Article.ArticleNumber, new { id = "artnrVal" + item.OrderLineId.ToString(), name = "artNum" })
+                </td>
+
+                <td>
+                    @Html.TextBoxFor(modelItem => item.Article.ArticleName, new { id = "artName" + item.OrderLineId.ToString(), name = "artName" })
+                </td>
+            }
             <td>
                 @Html.TextBoxFor(modelItem => item.NumberOfItems)
             </td>
@@ -104,12 +125,22 @@
                 @Html.TextBoxFor(modelItem => item.CreatedDate)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.OrderLineId }) |
-                @Html.ActionLink("Details", "Details", new { id = item.OrderLineId }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.OrderLineId })
+                @using (Html.BeginForm("Edit", "OrderLines", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(modelItem => item.Article.ArticleNumber, new { id = "artnrVal" + item.OrderLineId.ToString(), name = "artNum" })
+                    <button class="submit-sm-button" name="id" value="@item.OrderLineId"><i class="glyphicon glyphicon-save"></i></button>
+                }
             </td>
-            }
+            <td>
+                @using (Html.BeginForm("Delete", "OrderLines", FormMethod.Get))
+                {
+                    @Html.AntiForgeryToken()
+                    <button class="delete-button" name="id" value="@item.OrderLineId"><i class="glyphicon glyphicon-remove"></i></button>
+                }
+                @*@Html.ActionLink("Ta Bort", "Delete", new { id = item.OrderLineId }, new { @class = "delete-button" })*@
 
+            </td>
         </tr>
     }
 

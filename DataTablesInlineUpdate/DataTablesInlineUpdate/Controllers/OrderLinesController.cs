@@ -82,16 +82,20 @@ namespace DataTablesInlineUpdate.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "OrderLineId,NumberOfItems,PickedNumberOfItems,ArticleId,DeliveryDate,CreatedDate")] OrderLine orderLine)
+        public ActionResult Edit(OrderLine orderLine, FormCollection form,  int id)
         {
             if (ModelState.IsValid)
             {
+                string aId = form[1].ToString();
+                var artId = db.Articles.Where(x => x.ArticleNumber == aId).Select(x => x.ArticleId).SingleOrDefault();
+                orderLine = db.OrderLines.Find(id);
+                orderLine.ArticleId = Convert.ToInt32(artId);
                 db.Entry(orderLine).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.ArticleId = new SelectList(db.Articles, "ArticleId", "ArticleNumber", orderLine.ArticleId);
-            return View(orderLine);
+            //ViewBag.ArticleId = new SelectList(db.Articles, "ArticleId", "ArticleNumber", orderLine.ArticleId);
+            return RedirectToAction("Index");
         }
 
         // GET: OrderLines/Delete/5
