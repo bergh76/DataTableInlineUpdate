@@ -13,6 +13,11 @@
 
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+
+    <!-- Include Date Range Picker -->
+    <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+    <!-- END DATEPICKER CSS-->
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -46,7 +51,8 @@
             <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
         </footer>
     </div>
-    @Scripts.Render("~/bundles/bootstrap")
+        @Scripts.Render("~/bundles/bootstrap")
+        <script src="~/Scripts/SiteJs.js"></script>
     @*<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>*@
 
     @RenderSection("scripts", required: false)

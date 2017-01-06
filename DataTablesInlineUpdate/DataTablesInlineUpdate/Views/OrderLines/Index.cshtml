@@ -39,135 +39,136 @@
     {
 
         <script>
+            function dateClick(){
+                document.getElementById(@item.OrderLineId.ToString()).classList.add('row-update');
+            }
+            var artNrVal;
+            var artNameVal;
 
-    var artNrVal;
-    var artNameVal;
-    function GetValByClick(){
-        var currentText = document.getElementById("artName" + @item.OrderLineId.ToString()).value;
-        console.log("CurrentText:",currentText);
-        var newText = artNameVal;
-        console.log("NewText:",newText);
-        document.getElementById('artName' + @item.OrderLineId.ToString()).value = newText;
-        document.getElementById(@item.OrderLineId.ToString()).classList.add('row-update');
-    }
-    // Get articlenumber and list to textbox
-    $(document).ready(function () {
-        $("#artnrVal" + @item.OrderLineId.ToString()).autocomplete({
-            source: function (request, response) {
-                $.ajax({
-                    url: "/OrderLines/GetArticleNrValue",
-                    type: "GET",
-                    dataType: "json",
-                    data: { artnrVal: request.term },
-                    success: function (data) {
-                        response($.map(data, function (item) {
-                            artNameVal = item.ArticleName;
-                            return { label: item.ArticleNumber, value: item.ArticleNumber };
-                            new GetValByClick()
-                        }))
-                        @*$("#artnrVal" + @item.OrderLineId.ToString()).click(function(){*@ 
-                        @*$(document).ready(function () {
-                            var currentText = document.getElementById("artName" + @item.OrderLineId.ToString()).value;
-                            console.log("CurrentText:",currentText);
-                            var newText = artNameVal;
-                            console.log("NewText:",newText);
-                            document.getElementById('artName' + @item.OrderLineId.ToString()).value = newText;
-                            document.getElementById(@item.OrderLineId.ToString()).classList.add('row-update');*@
-
-                        //});
+            // Get articlenumber and list to textbox
+            $(document).ready(function () {
+                $("#artnrVal" + @item.OrderLineId.ToString()).autocomplete({
+                    source: function (request, response) {
+                        $.ajax({
+                            url: "/OrderLines/GetArticleNrValue",
+                            type: "GET",
+                            dataType: "json",
+                            data: { artnrVal: request.term },
+                            success: function (data) {
+                                response($.map(data, function (item) {
+                                    artNameVal = item.ArticleName;
+                                    return { label: item.ArticleNumber, value: item.ArticleNumber };
+                                }))
+                            }
+                        })
+                    },
+                    focus: function(event, ui ) {
+                        console.log("Focus event: \n", event);
+                        console.log("Ui log: \n", ui);
+                        var currentText = document.getElementById("artName" + @item.OrderLineId.ToString()).value;
+                        console.log("CurrentText:",currentText);
+                        var newText = artNameVal;
+                        console.log("NewText:",newText);
+                        document.getElementById('artName' + @item.OrderLineId.ToString()).value = newText;
+                    },
+                    select: function (e, ui) {
+                        var currentText = document.getElementById("artName" + @item.OrderLineId.ToString()).value;
+                        console.log("CurrentText:",currentText);
+                        var newText = artNameVal;
+                        console.log("NewText:",newText);
+                        document.getElementById('artName' + @item.OrderLineId.ToString()).value = newText;
+                        document.getElementById(@item.OrderLineId.ToString()).classList.add('row-update');
                     }
-                })
-            },
-        });
-    })
-    // Get articlename and list to textbox
-    $(document).ready(function () {
-        $("#artName" + @item.OrderLineId.ToString()).autocomplete({
-            source: function (request, response) {
-                $.ajax({
-                    url: "/OrderLines/GetArticleName",
-                    type: "GET",
-                    dataType: "json",
-                    data: { artName: request.term },
-                    success: function (data) {
-                        console.log(data);
-                        response($.map(data, function (item) {
-                            artNrVal = item.ArticleNumber;
-                            return { label: item.ArticleName, value: item.ArticleName };
-                            //new clickAction();
-                        }))
-                        console.log(artNrVal);
-                        @*var clickAction = $("#artName" + @item.OrderLineId.ToString()).click(function(){//*@
-                        $(document).ready(function () {
-                            var currentText = document.getElementById('artnrVal' + @item.OrderLineId.ToString()).value;
-                            var newText = artNrVal;
-                            console.log(newText);
-                            document.getElementById('artnrVal' + @item.OrderLineId.ToString()).value = newText;
-                            document.getElementById(@item.OrderLineId.ToString()).classList.add('row-update');
-
-                        });
-                    }
-                })
-            },
-        });
-    })
+                });
+            })
+            // Get articlename and list to textbox
+            $(document).ready(function () {
+                $("#artName" + @item.OrderLineId.ToString()).autocomplete({
+                    source: function (request, response) {
+                        $.ajax({
+                            url: "/OrderLines/GetArticleName",
+                            type: "GET",
+                            dataType: "json",
+                            data: { artName: request.term },
+                            success: function (data) {
+                                console.log(data);
+                                response($.map(data, function (item) {
+                                    artNrVal = item.ArticleNumber;
+                                    return { label: item.ArticleName, value: item.ArticleName };
+                                }))
+                            }
+                        })
+                    },
+                    focus: function( event, ui ) {
+                        console.log("Focus event: \n", event);
+                        console.log("Ui log: \n", ui);
+                        var currentText = document.getElementById('artnrVal' + @item.OrderLineId.ToString()).value;
+                        var newText = artNrVal;
+                        console.log(newText);
+                        document.getElementById('artnrVal' + @item.OrderLineId.ToString()).value = newText;
+                    },
+                    select: function(e, ui){
+                        var currentText = document.getElementById('artnrVal' + @item.OrderLineId.ToString()).value;
+                        var newText = artNrVal;
+                        console.log(newText);
+                        document.getElementById('artnrVal' + @item.OrderLineId.ToString()).value = newText;
+                        document.getElementById(@item.OrderLineId.ToString()).classList.add('row-update');
+                    },
+                });
+            })
         </script>
 
 
         <tr id=@item.OrderLineId>
-@using (Ajax.BeginForm("Tester", "OrderLines", new AjaxOptions() { UpdateTargetId = "ajax-orders", HttpMethod = "Get", InsertionMode = InsertionMode.Replace, AllowCache = true }))
+            @using (Ajax.BeginForm("Tester", "OrderLines", new AjaxOptions() { UpdateTargetId = "ajax-orders", HttpMethod = "Get", InsertionMode = InsertionMode.Replace, AllowCache = true }))
 
-{
+            {
 
-    var artnum = "artnrVal" + item.OrderLineId.ToString();
+                var artnum = "artnrVal" + item.OrderLineId.ToString();
 
-                    <td>
-                        @if (TempData["IsFixd"] != null)
+                <td>
+                    @if (TempData["IsFixd"] != null)
+                    {
+                        if (TempData["IsFixd"] == "true")
                         {
-                            if (TempData["IsFixd"] == "true")
-                            {
-                                <span>derpeppdperpepr</span>
-                            }
+                            <span>derpeppdperpepr</span>
                         }
-                        <input type="hidden" name="orderlineid" value=@item.OrderLineId />
-                        <input id=@artnum name="artNum" value=@item.Article.ArticleNumber />
-                    </td>
-
-                    <td>
-                        @Html.TextBoxFor(modelItem => item.Article.ArticleName, new { id = "artName" + item.OrderLineId.ToString(), name = "artName" })
-                    </td>
-                    <td>
-                        <input type="number" value=@item.NumberOfItems name="numberofitems" />
-
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PickedNumberOfItems)
-                    </td>
-                    <td>
-                        <input type="date" value=@item.DeliveryDate.Value.ToShortDateString() name="deliverydate" />
-
-                    </td>
-                    <td>
-                        @{var cDate = item.CreatedDate.ToShortDateString(); }
-                            @Html.DisplayFor(modelItem => cDate)
-                    </td>
-                    <td>
-
-                        <button class="submit-sm-button" type="submit"><i class="glyphicon glyphicon-edit"></i> </button>
-
-                    </td>
-                    <td>
-
-                        @*@Html.ActionLink("Ta Bort", "Delete", new { id = item.OrderLineId }, new { @class = "delete-button" })*@
-
-                    </td>
-
                     }
+                    <input type="hidden" name="orderlineid" value=@item.OrderLineId />
+                    <input id=@artnum name="artNum" value=@item.Article.ArticleNumber />
+                </td>
 
+                <td>
+                    @Html.TextBoxFor(modelItem => item.Article.ArticleName, new { id = "artName" + item.OrderLineId.ToString(), name = "artName" })
+                </td>
+                <td>
+                    <input type="number" value=@item.NumberOfItems name="numberofitems" />
 
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PickedNumberOfItems)
+                </td>
+                 <td>
+                     <input type="date" value=@item.DeliveryDate.Value.ToShortDateString() name="deliverydate" onclick="dateClick()" />
+
+                 </td>
+                 <td>
+                     @{var cDate = item.CreatedDate.ToShortDateString(); }
+                     @Html.DisplayFor(modelItem => cDate)
+                 </td>
+                 <td>
+
+                     <button class="submit-sm-button" type="submit"><i class="glyphicon glyphicon-edit"></i> </button>
+
+                 </td>
+                 <td>
+
+                     @*@Html.ActionLink("Ta Bort", "Delete", new { id = item.OrderLineId }, new { @class = "delete-button" })*@
+
+                    </td>
+                            }
         </tr>
-
-                    }
+                            }
 </table>
 
 

@@ -198,13 +198,17 @@ namespace DataTablesInlineUpdate.Controllers
         {
             if (Request.IsAjaxRequest())
             {
-                var s = db.Articles.Where(w => w.ArticleNumber
+                //var num = (from N in db.Articles.ToList()
+                //              where N.ArticleNumber.StartsWith(artnrVal)
+                // select new { N.ArticleNumber });
+
+                var num = db.Articles.Where(w => w.ArticleNumber
                 .ToLower()
-                .Contains(artnrVal.ToLower()
+                .StartsWith(artnrVal.ToLower()
                 )
             )
             .ToList();
-                return Json(s, JsonRequestBehavior.AllowGet);
+                return Json(num, JsonRequestBehavior.AllowGet);
             }
             return Json(false);
         }
@@ -213,13 +217,16 @@ namespace DataTablesInlineUpdate.Controllers
         {
             if (Request.IsAjaxRequest())
             {
-                var s = db.Articles.Where(w => w.ArticleName
+                //var name = (from N in db.Articles.ToList()
+                //              where N.ArticleNumber.StartsWith(artName)
+                //              select new { N.ArticleName });
+                var name = db.Articles.Where(w => w.ArticleName
                 .ToLower()
-                .Contains(artName.ToLower()
+                .StartsWith(artName.ToLower()
                 )
             )
             .ToList();
-                return Json(s, JsonRequestBehavior.AllowGet);
+                return Json(name, JsonRequestBehavior.AllowGet);
             }
             return Json(false);
         }
