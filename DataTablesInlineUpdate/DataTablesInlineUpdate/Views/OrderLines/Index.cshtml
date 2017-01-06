@@ -1,7 +1,9 @@
 ﻿@model IEnumerable<DataTablesInlineUpdate.Models.OrderLine>
+@using DataTablesInlineUpdate.Models;
 
 @{
     ViewBag.Title = "Index";
+    Session["OrderLines"] = new List<OrderLine>();
 }
 
 <h2>Index</h2>
@@ -9,7 +11,7 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table table-responsive table-striped">
+<table class="table">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.Article.ArticleNumber)
@@ -40,28 +42,31 @@
 
     var artNrVal;
     var artNameVal;
+
     // Get articlenumber and list to textbox
     $(document).ready(function () {
-        $("artnrVal" + @item.OrderLineId.ToString()).autocomplete({
+        $("#artnrVal" + @item.OrderLineId.ToString()).autocomplete({
             source: function (request, response) {
                 $.ajax({
                     url: "/OrderLines/GetArticleNrValue",
-                    type: "POST",
+                    type: "GET",
                     dataType: "json",
                     data: { artnrVal: request.term },
                     success: function (data) {
                         response($.map(data, function (item) {
                             artNameVal = item.ArticleName;
-                            return {
-                                label: item.ArticleNumber, value: item.ArticleNumber,
-                            };
+                            return { label: item.ArticleNumber, value: item.ArticleNumber };
+                            //new clickAction();
                         }))
-                        console.log(artNameVal);
-                        $(document).ready(function () {
-                            var currentText = document.getElementById('artName'+ @item.OrderLineId.ToString()).value;
+                        $("#artnrVal" + @item.OrderLineId.ToString()).click(function(){ 
+                        //$(document).ready(function () {
+                            var currentText = document.getElementById("artName" + @item.OrderLineId.ToString()).value;
+                            console.log("CurrentText:",currentText);
                             var newText = artNameVal;
-                            console.log(newText);
-                            document.getElementById('artName'+ @item.OrderLineId.ToString()).value = newText;
+                            console.log("NewText:",newText);
+                            document.getElementById('artName' + @item.OrderLineId.ToString()).value = newText;
+                            document.getElementById(@item.OrderLineId.ToString()).classList.add('row-update');
+
                         });
                     }
                 })
@@ -74,23 +79,24 @@
             source: function (request, response) {
                 $.ajax({
                     url: "/OrderLines/GetArticleName",
-                    type: "POST",
+                    type: "GET",
                     dataType: "json",
-                    data: {
-                        artName: request.term
-                    },
+                    data: { artName: request.term },
                     success: function (data) {
                         console.log(data);
                         response($.map(data, function (item) {
                             artNrVal = item.ArticleNumber;
                             return { label: item.ArticleName, value: item.ArticleName };
+                            //new clickAction();
                         }))
                         console.log(artNrVal);
+                        @*var clickAction = $("#artName" + @item.OrderLineId.ToString()).click(function(){//*@
                         $(document).ready(function () {
-                            var currentText = document.getElementById('artnrVal'+ @item.OrderLineId.ToString()).value;
+                            var currentText = document.getElementById('artnrVal' + @item.OrderLineId.ToString()).value;
                             var newText = artNrVal;
                             console.log(newText);
-                            document.getElementById('artnrVal'+ @item.OrderLineId.ToString()).value = newText;
+                            document.getElementById('artnrVal' + @item.OrderLineId.ToString()).value = newText;
+                            document.getElementById(@item.OrderLineId.ToString()).classList.add('row-update');
 
                         });
                     }
@@ -99,49 +105,64 @@
         });
     })
         </script>
-        <tr>
-            @using (Html.BeginForm())
-            {
-                @Html.AntiForgeryToken()
 
-                <td>
-                    @Html.TextBoxFor(modelItem => item.Article.ArticleNumber, new { id = "artnrVal" + item.OrderLineId.ToString(), name = "artNum" })
-                </td>
 
-                <td>
-                    @Html.TextBoxFor(modelItem => item.Article.ArticleName, new { id = "artName" + item.OrderLineId.ToString(), name = "artName" })
-                </td>
-            }
-            <td>
-                @Html.TextBoxFor(modelItem => item.NumberOfItems)
-            </td>
-            <td>
-                @Html.TextBoxFor(modelItem => item.PickedNumberOfItems)
-            </td>
-            <td>
-                @Html.TextBoxFor(modelItem => item.DeliveryDate)
-            </td>
-            <td>
-                @Html.TextBoxFor(modelItem => item.CreatedDate)
-            </td>
-            <td>
-                @using (Html.BeginForm("Edit", "OrderLines", FormMethod.Post))
-                {
-                    @Html.AntiForgeryToken()
-                    @Html.HiddenFor(modelItem => item.Article.ArticleNumber, new { id = "artnrVal" + item.OrderLineId.ToString(), name = "artNum" })
-                    <button class="submit-sm-button" name="id" value="@item.OrderLineId"><i class="glyphicon glyphicon-save"></i></button>
-                }
-            </td>
-            <td>
-                @using (Html.BeginForm("Delete", "OrderLines", FormMethod.Get))
-                {
-                    @Html.AntiForgeryToken()
-                    <button class="delete-button" name="id" value="@item.OrderLineId"><i class="glyphicon glyphicon-remove"></i></button>
-                }
-                @*@Html.ActionLink("Ta Bort", "Delete", new { id = item.OrderLineId }, new { @class = "delete-button" })*@
+        <tr id=@item.OrderLineId>
+@using (Ajax.BeginForm("Tester", "OrderLines", new AjaxOptions() { UpdateTargetId = "ajax-orders", HttpMethod = "Get", InsertionMode = InsertionMode.Replace, AllowCache = true }))
 
-            </td>
+{
+
+    var artnum = "artnrVal" + item.OrderLineId.ToString();
+
+                    <td>
+                        @if (TempData["IsFixd"] != null)
+                        {
+                            if (TempData["IsFixd"] == "true")
+                            {
+                                <span>derpeppdperpepr</span>
+                            }
+                        }
+                        <input type="hidden" name="orderlineid" value=@item.OrderLineId />
+                        <input id=@artnum name="artNum" value=@item.Article.ArticleNumber />
+                    </td>
+
+                    <td>
+                        @Html.TextBoxFor(modelItem => item.Article.ArticleName, new { id = "artName" + item.OrderLineId.ToString(), name = "artName" })
+                    </td>
+                    <td>
+                        <input type="number" value=@item.NumberOfItems name="numberofitems" />
+
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PickedNumberOfItems)
+                    </td>
+                    <td>
+                        <input type="date" value=@item.DeliveryDate.Value.ToShortDateString() name="deliverydate" />
+
+                    </td>
+                    <td>
+                        @{var cDate = item.CreatedDate.ToShortDateString(); }
+                            @Html.DisplayFor(modelItem => cDate)
+                    </td>
+                    <td>
+
+                        <button class="submit-sm-button" type="submit"><i class="glyphicon glyphicon-edit"></i> </button>
+
+                    </td>
+                    <td>
+
+                        @*@Html.ActionLink("Ta Bort", "Delete", new { id = item.OrderLineId }, new { @class = "delete-button" })*@
+
+                    </td>
+
+                    }
+
+
         </tr>
-    }
 
+                    }
 </table>
+
+
+
+<div id="ajax-orders"></div>
