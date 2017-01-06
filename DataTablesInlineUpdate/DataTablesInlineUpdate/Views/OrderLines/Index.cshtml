@@ -42,7 +42,14 @@
 
     var artNrVal;
     var artNameVal;
-
+    function GetValByClick(){
+        var currentText = document.getElementById("artName" + @item.OrderLineId.ToString()).value;
+        console.log("CurrentText:",currentText);
+        var newText = artNameVal;
+        console.log("NewText:",newText);
+        document.getElementById('artName' + @item.OrderLineId.ToString()).value = newText;
+        document.getElementById(@item.OrderLineId.ToString()).classList.add('row-update');
+    }
     // Get articlenumber and list to textbox
     $(document).ready(function () {
         $("#artnrVal" + @item.OrderLineId.ToString()).autocomplete({
@@ -56,18 +63,18 @@
                         response($.map(data, function (item) {
                             artNameVal = item.ArticleName;
                             return { label: item.ArticleNumber, value: item.ArticleNumber };
-                            //new clickAction();
+                            new GetValByClick()
                         }))
-                        $("#artnrVal" + @item.OrderLineId.ToString()).click(function(){ 
-                        //$(document).ready(function () {
+                        @*$("#artnrVal" + @item.OrderLineId.ToString()).click(function(){*@ 
+                        @*$(document).ready(function () {
                             var currentText = document.getElementById("artName" + @item.OrderLineId.ToString()).value;
                             console.log("CurrentText:",currentText);
                             var newText = artNameVal;
                             console.log("NewText:",newText);
                             document.getElementById('artName' + @item.OrderLineId.ToString()).value = newText;
-                            document.getElementById(@item.OrderLineId.ToString()).classList.add('row-update');
+                            document.getElementById(@item.OrderLineId.ToString()).classList.add('row-update');*@
 
-                        });
+                        //});
                     }
                 })
             },
