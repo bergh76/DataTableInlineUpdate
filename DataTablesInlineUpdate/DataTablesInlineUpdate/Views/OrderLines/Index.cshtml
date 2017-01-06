@@ -48,6 +48,7 @@
             // Get articlenumber and list to textbox
             $(document).ready(function () {
                 $("#artnrVal" + @item.OrderLineId.ToString()).autocomplete({
+                    autoFocus: true,
                     source: function (request, response) {
                         $.ajax({
                             url: "/OrderLines/GetArticleNrValue",
@@ -62,16 +63,17 @@
                             }
                         })
                     },
-                    focus: function(event, ui ) {
+                    focus: function(event, ui) {
                         console.log("Focus event: \n", event);
                         console.log("Ui log: \n", ui);
                         var currentText = document.getElementById("artName" + @item.OrderLineId.ToString()).value;
                         console.log("CurrentText:",currentText);
-                        var newText = artNameVal;
+                        var newText = ui;
                         console.log("NewText:",newText);
                         document.getElementById('artName' + @item.OrderLineId.ToString()).value = newText;
                     },
                     select: function (e, ui) {
+                        console.log("E logger: \n",e)
                         var currentText = document.getElementById("artName" + @item.OrderLineId.ToString()).value;
                         console.log("CurrentText:",currentText);
                         var newText = artNameVal;
@@ -84,6 +86,7 @@
             // Get articlename and list to textbox
             $(document).ready(function () {
                 $("#artName" + @item.OrderLineId.ToString()).autocomplete({
+                    autoFocus: true,
                     source: function (request, response) {
                         $.ajax({
                             url: "/OrderLines/GetArticleName",
@@ -99,15 +102,16 @@
                             }
                         })
                     },
-                    focus: function( event, ui ) {
+                    focus: function( event, ui) {
                         console.log("Focus event: \n", event);
                         console.log("Ui log: \n", ui);
                         var currentText = document.getElementById('artnrVal' + @item.OrderLineId.ToString()).value;
-                        var newText = artNrVal;
+                        var newText = ui;
                         console.log(newText);
                         document.getElementById('artnrVal' + @item.OrderLineId.ToString()).value = newText;
                     },
                     select: function(e, ui){
+                        console.log("E logger: \n",e)
                         var currentText = document.getElementById('artnrVal' + @item.OrderLineId.ToString()).value;
                         var newText = artNrVal;
                         console.log(newText);
